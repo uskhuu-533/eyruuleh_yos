@@ -6,17 +6,16 @@ import { supabase } from "@/lib/supabase";
 
 export default function BattlePage() {
   const [word, setWord] = useState("");
-  const [status, setStatus] = useState<"waiting" | "playing" | "ended">(
-    "waiting",
-  );
+  const [status, setStatus] = useState<"waiting" | "playing" | "ended">("waiting");
   const [teamId, setTeamId] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState(0);
 
-  // 📱 localStorage-оос багийн id унших
+  // 📱 teamId унших
   useEffect(() => {
     setTeamId(localStorage.getItem("teamId"));
   }, []);
 
-  // ⏳ Session realtime + countdown sync
+  // ⏳ Session + Countdown (ONE SOURCE OF TRUTH)
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 
@@ -26,19 +25,23 @@ export default function BattlePage() {
         .select("*")
         .single();
 
-      // session байхгүй эсвэл идэвхгүй
       if (!data?.is_active || !data.started_at) {
         setStatus("waiting");
+        setTimeLeft(0);
         if (timer) clearInterval(timer);
         return;
       }
 
-      const end = new Date(data.started_at).getTime() + data.duration * 1000;
+      const end =
+        new Date(data.started_at).getTime() +
+        data.duration * 1000;
 
       if (timer) clearInterval(timer);
 
       timer = setInterval(() => {
         const now = Date.now();
+        const left = Math.max(0, Math.floor((end - now) / 1000));
+        setTimeLeft(left);
 
         if (now >= end) {
           setStatus("ended");
@@ -49,16 +52,15 @@ export default function BattlePage() {
       }, 1000);
     };
 
-    // анхны sync
     syncSession();
 
-    // 🔥 Admin Start / Stop хийхэд realtime trigger
+    // realtime admin start/stop
     const channel = supabase
       .channel("session-live")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "game_sessions" },
-        syncSession,
+        syncSession
       )
       .subscribe();
 
@@ -73,7 +75,6 @@ export default function BattlePage() {
     if (status !== "playing" || !word.trim()) return;
     if (!teamId) return alert("Баг олдсонгүй!");
 
-    // давхардал шалгах
     const { data: exists } = await supabase
       .from("euphemisms")
       .select("id")
@@ -86,7 +87,6 @@ export default function BattlePage() {
       return;
     }
 
-    // insert
     const { error } = await supabase.from("euphemisms").insert({
       word: word.trim(),
       team_id: teamId,
@@ -94,7 +94,6 @@ export default function BattlePage() {
 
     if (error) return alert("Алдаа гарлаа!");
 
-    await supabase.rpc("increment_score", { team_id: teamId });
     setWord("");
   }, [status, word, teamId]);
 
@@ -112,7 +111,15 @@ export default function BattlePage() {
         </p>
       )}
 
-      {status === "ended" && <p className="text-red-600">⛔ Хугацаа дууссан</p>}
+      {status === "playing" && (
+        <p className="text-xl font-bold">
+          ⏱️ Үлдсэн: {timeLeft}s
+        </p>
+      )}
+
+      {status === "ended" && (
+        <p className="text-red-600">⛔ Хугацаа дууссан</p>
+      )}
 
       <input
         className="w-full border p-4 rounded text-lg"

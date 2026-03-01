@@ -26,7 +26,7 @@ export default function JoinPage() {
 
   return (
     <main className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">👥 Багтаа нэгдэх</h1>
+      <h1 className="text-2xl font-bold">Багаа сонгох </h1>
 
       <input
         placeholder="Нэрээ бич"
@@ -52,7 +52,7 @@ export default function JoinPage() {
         onClick={join}
         className="w-full bg-blue-600 text-white p-3 rounded text-lg"
       >
-        Battle руу орох 🚀
+        орох
       </button>
     </main>
   );

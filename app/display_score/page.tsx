@@ -136,7 +136,7 @@ export default function RankPage() {
   return (
     <main className="min-h-screen bg-black text-white p-6">
       <h1 className="text-5xl font-bold text-center mb-6">
-        🏆 Эерүүлэх Arena
+        Эерүүлэх 
       </h1>
 
       <h2 className="text-center text-3xl mb-10">
