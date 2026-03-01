@@ -3,6 +3,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
 
 export default function BattlePage() {
   const [word, setWord] = useState("");
@@ -83,6 +84,7 @@ export default function BattlePage() {
 
     if (exists) {
       alert("Давхардсан үг!");
+      toast('Давхардсан үг!', {position:'top-center'})
       setWord("");
       return;
     }
@@ -94,6 +96,7 @@ export default function BattlePage() {
 
     if (error) return alert("Алдаа гарлаа!");
 
+    toast("амжилттай нэмэгдлээ", {position:"top-center"})
     setWord("");
   }, [status, word, teamId]);
 
@@ -126,7 +129,7 @@ export default function BattlePage() {
         value={word}
         onChange={(e) => setWord(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Ж: нас барах"
+        placeholder="үгээ оруулна уу"
         disabled={status !== "playing"}
       />
 
