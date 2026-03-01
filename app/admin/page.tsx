@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
+import TeamsManager from "./_components/team_m";
 
 export default function AdminPage() {
   const [teamName, setTeamName] = useState("");
@@ -42,7 +43,7 @@ const utc8 = new Date(now.getTime() + 8 * 60 * 60 * 1000);
   
   
   return (
-    <main className="p-10 max-w-md mx-auto space-y-4">
+    <main className="p-10 max-w-2xl mx-auto space-y-4">
       <h1 className="text-2xl font-bold">🛠 Admin Panel</h1>
 
       <input
@@ -80,6 +81,7 @@ const utc8 = new Date(now.getTime() + 8 * 60 * 60 * 1000);
       </button>
 
       <button onClick={clearGame} className="w-full bg-yellow-600 text-white p-3 rounded">Clear</button> 
+      <TeamsManager></TeamsManager>
     </main>
   );
 }

@@ -26,6 +26,9 @@ export default function JoinPage() {
 
   return (
     <main className="p-6 space-y-4">
+      <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded text-sm">
+  ⚠️ Зөвхөн кирилл жижиг үсгээр бичнэ. Дүрэм зөрвөл оноо эсрэг багт очно. Мөн эерүүлэх үг биш бол оноо тооцогдохгүй.
+</div>
       <h1 className="text-2xl font-bold">Багаа сонгох </h1>
 
       <input
