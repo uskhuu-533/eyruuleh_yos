@@ -144,11 +144,11 @@ export default function RankPage() {
       </h2>
 
       {/* 🧠 Flex row layout */}
-      <div className="flex gap-8 justify-center items-start overflow-x-auto">
+      <div className="flex gap-4 justify-center items-start overflow-x-auto">
         {teams.map((team) => (
           <div
             key={team.id}
-            className="bg-white/10 backdrop-blur rounded-xl p-6 min-w-[250px]"
+            className="bg-white/10 backdrop-blur rounded-xl p-6 min-w-[200px]"
           >
             <h2 className="text-2xl font-bold mb-2">
               {team.name}
